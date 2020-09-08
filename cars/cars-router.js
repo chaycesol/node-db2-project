@@ -52,4 +52,37 @@ router.post('/', (req, res) => {
     });
 });
 
+/* PUT REQUESTS */
+router.put('/:id', (req, res) =>{
+    const changes = req.body;
+    
+    db('cars')
+    .where("id", "=", req.params.id)
+    .update(changes)
+    .then( count => {
+        if (count) {
+            res.status(200).json({ data: count });
+        } else {
+            res.status(404).json({ message: "record not found"});
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({ message: err.message })
+    });
+});
+
+/* DELETE REQUESTS */
+router.delete('/:id', (req,res) => {
+    db('cars')
+    .where("id", "=", req.params.id)
+    .del()
+    .then( count => {
+        res.status(200).json({ data: count })
+    })
+    .catch(err => {
+        res.status(500).json({ message: error.message });
+    });
+});
+
 module.exports = router
